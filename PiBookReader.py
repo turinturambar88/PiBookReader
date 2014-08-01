@@ -24,16 +24,17 @@ if args.register:
         time.sleep(1)
         sp.flushInput()
         data = sp.read(14)
-        if len(data) == 14 and data not in rfid_dict:
+        if len(data) == 14 and data.encode('hex') not in rfid_dict.keys():
             print "Read new card id: " + data.encode('hex')
             id = raw_input('Enter Tag ID --> ')
             rfid_dict[data.encode('hex')] = id
-        stop = raw_input("Exit? (Y/N)")
-        if stop == 'Y' or stop == 'y':
-            active = False
+            stop = raw_input("Exit? (Y/N)")
+            if stop == 'Y' or stop == 'y':
+                active = False
     
     ofile = open(fname,'w')
-    #NEED TO WRITE DICTIONARY HERE
+    for key in rfid_dict.keys():
+    	ofile.write(key + " " + rfid_dict[key] + "\n")
     ofile.close()
 else:
     while 1:
