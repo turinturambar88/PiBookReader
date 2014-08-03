@@ -37,15 +37,16 @@ if args.register:
     	ofile.write(key + " " + rfid_dict[key] + "\n")
     ofile.close()
 else:
+    from cards import card_dict
+    
     while 1:
-        time.sleep(4)
+        time.sleep(1)
     
         sp.flushInput()
         data = sp.read(14)
-    
-        #data = sp.read(sp.inWaiting())
-        print "data =  " + data
-        print "data length = " + str(len(data))
-        print "data hex = " + data.encode('hex')
-    
+        if len(data) == 14 and data.encode('hex') in card_dict.keys():
+            print "Successful read: " + data.encode('hex')
+            print "File options are: "
+            print card_dict[data.encode('hex')]
+        
     sp.close()
