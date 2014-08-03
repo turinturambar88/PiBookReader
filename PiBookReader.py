@@ -2,6 +2,7 @@ from serial import Serial
 import time
 import argparse
 import pygame
+import random
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-r","--register", action="store_true", help="register RFID cards interactively")
@@ -52,9 +53,8 @@ else:
             if len(card_dict[data.encode('hex')]) == 0:
                 print "No files found"
             else:
-                #Add random selection from list
                 print "Playing audio"
-                audio_file = card_dict[data.encode('hex')]
+                audio_file = random.choice(card_dict[data.encode('hex')])
                 audio = pygame.mixer.Sound(audio_file[0])
                 audio.play()
         
