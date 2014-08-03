@@ -1,6 +1,7 @@
 from serial import Serial
 import time
 import argparse
+import pygame
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-r","--register", action="store_true", help="register RFID cards interactively")
@@ -38,15 +39,23 @@ if args.register:
     ofile.close()
 else:
     from cards import card_dict
-    
+    pygame.mixer.init()
+    print "Done initializing...scan card for playback"
     while 1:
         time.sleep(1)
-    
         sp.flushInput()
         data = sp.read(14)
         if len(data) == 14 and data.encode('hex') in card_dict.keys():
             print "Successful read: " + data.encode('hex')
             print "File options are: "
             print card_dict[data.encode('hex')]
+            if len(card_dict[data.encode('hex')]) == 0:
+                print "No files found"
+            else:
+                #Add random selection from list
+                print "Playing audio"
+                audio_file = card_dict[data.encode('hex')]
+                audio = pygame.mixer.Sound(audio_file[0])
+                audio.play()
         
     sp.close()
